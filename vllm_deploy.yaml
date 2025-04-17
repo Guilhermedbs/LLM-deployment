@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-deploy
+  labels:
+    tier: backend
+    app: vllm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      name: vllm
+      labels:
+        app: vllm
+    spec:
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:latest
+          env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              value:
+          args: [
+            "--model", "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+            "--num-gpu-blocks-override", "200"
+          ]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: model-cache
+              mountPath: /root/.cache/huggingface  
+      volumes:
+          - name: model-cache
+            hostPath:
+              path: /mnt/huggingface  
+              type: Directory

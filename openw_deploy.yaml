@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwebui-deploy
+  labels:
+    tier: frontend
+    app: openwebui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: openwebui
+  template:
+    metadata:
+      name: openwebui
+      labels:
+        app: openwebui
+    spec:
+      containers:
+        - name: openwebui
+          image: ghcr.io/open-webui/open-webui:latest
+          ports:
+            - containerPort: 3000
