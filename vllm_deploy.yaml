@@ -6,7 +6,7 @@ metadata:
     tier: backend
     app: vllm
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: vllm
@@ -21,7 +21,10 @@ spec:
           image: vllm/vllm-openai:latest
           env:
             - name: HUGGING_FACE_HUB_TOKEN
-              value:
+              valueFrom:
+                secretKeyRef:
+                  name: huggingface-token
+                  key: token
           args: [
             "--model", "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
             "--num-gpu-blocks-override", "200"
@@ -33,6 +36,5 @@ spec:
               mountPath: /root/.cache/huggingface  
       volumes:
           - name: model-cache
-            hostPath:
-              path: /mnt/huggingface  
-              type: Directory
+            persistentVolumeClaim: 
+              claimName: tinyllama

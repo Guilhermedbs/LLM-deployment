@@ -6,7 +6,7 @@ metadata:
     tier: frontend
     app: openwebui
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: openwebui
@@ -19,5 +19,8 @@ spec:
       containers:
         - name: openwebui
           image: ghcr.io/open-webui/open-webui:latest
+          env:
+            - name: OPENAI_API_BASE_URL
+              value: http://vllm-service:8000/v1
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
