@@ -35,6 +35,7 @@ spec:
             - name: model-cache
               mountPath: /root/.cache/huggingface  
       volumes:
-          - name: model-cache
-            persistentVolumeClaim: 
-              claimName: tinyllama
+           - name: model-cache
+             hostPath:
+              path: /mnt/huggingface  
+              type: Directory
