@@ -32,10 +32,10 @@ spec:
           ports:
             - containerPort: 8000
           volumeMounts:
-            - name: model-cache
+            - name: models
               mountPath: /root/.cache/huggingface  
       volumes:
-           - name: model-cache
+           - name: models
              hostPath:
               path: /mnt/huggingface  
               type: Directory

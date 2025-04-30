@@ -31,7 +31,7 @@ This project provides Kubernetes configuration files to deploy:
 ## Prerequisites
 
 - Kubernetes cluster (local or remote)
-- Persistent Volume for model storage or mount with the path of the host models cache.
+- Volume mount for model storage with the path of the host models cache.
 - HuggingFace token (stored as a Kubernetes secret)
 
 ## Setup
@@ -62,7 +62,18 @@ kubectl apply -f secret.yaml
 ```
 
 
-2. Create a persistent volume claim named 'tinyllama' (you'll need to create a corresponding PV configuration)
+2. Create volume mount for vllm to acess the models
+
+```yaml
+          volumeMounts:
+            - name: models
+              mountPath: /root/.cache/huggingface  
+      volumes:
+           - name: models
+             hostPath:
+              path: /mnt/huggingface  
+              type: Directory
+```
 
 3. Deploy all resources:
 ```bash
@@ -102,4 +113,4 @@ Or if you are using a VM you can acess:
 
 ## License
 
-[Specify license information here]
+This project is licensed under the MIT License - see the LICENSE file for details.
